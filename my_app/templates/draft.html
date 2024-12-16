@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Card Pop-up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    /* Pet Card Styling */
+    .pet-card {
+      position: relative;
+      display: inline-block;
+      width: 200px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .pet-card img {
+      width: 100%;
+      height: auto;
+    }
+    .pet-info {
+      padding: 10px;
+      background: #f4f4f4;
+    }
+    .pet-info h1 {
+      font-size: 18px;
+      margin: 5px 0;
+    }
+    .heart-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: red;
+    }
+
+    /* Pop-up and Overlay Styling */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #d2b48c;
+      width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      text-align: center;
+    }
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .popup-header .close-btn {
+      cursor: pointer;
+      color: #333;
+    }
+    .popup-content {
+      padding: 15px;
+    }
+    .popup-content img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+    }
+    .popup-content h1 {
+      margin: 10px 0;
+      font-size: 24px;
+    }
+    .popup-content p {
+      font-size: 14px;
+    }
+    .message-box {
+      display: flex;
+      margin-top: 10px;
+    }
+    .message-box input {
+      flex: 1;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px 0 0 5px;
+    }
+    .message-box button {
+      border: none;
+      background: #ddd;
+      padding: 5px 10px;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Pet Card -->
+<div class="pet-card">
+  <a href="#" id="showPopup" style="text-decoration: none;">
+    <img src="tagline.png" alt="Alexis the Cat">
+    <div class="pet-info">
+      <h1>Alexis (4), M</h1>
+      <p>Short Description</p>
+    </div>
+  </a>
+  <div class="heart-icon">
+    <i class="fa fa-heart"></i>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Pop-up -->
+<div class="popup" id="popup">
+  <div class="popup-header">
+    ALEXIS
+    <span class="close-btn" id="closePopup">X</span>
+  </div>
+  <div class="popup-content">
+    <img src="tagline.png" alt="Alexis">
+    <h1>Alexis</h1>
+    <p>Male | 4 <i>(Breed)</i></p>
+    <p>📍 San Jose City, Nueva Ecija</p>
+    <p>PERSONALITY TRAITS:<br>HOBBIES:<br>COMPATIBILITY:</p>
+    <div class="message-box">
+      <input type="text" placeholder="Send a message...">
+      <button>➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Elements
+  const showPopup = document.getElementById("showPopup");
+  const closePopup = document.getElementById("closePopup");
+  const overlay = document.getElementById("overlay");
+  const popup = document.getElementById("popup");
+
+  // Show pop-up
+  showPopup.addEventListener("click", function (e) {
+    e.preventDefault();
+    overlay.style.display = "block";
+    popup.style.display = "block";
+  });
+
+  // Hide pop-up
+  closePopup.addEventListener("click", function () {
+    overlay.style.display = "none";
+    popup.style.display = "none";
+  });
+
+  // Close overlay
+  overlay.addEventListener("click", function () {
+    overlay.style.display = "none";
+    popup.style.display = "none";
+  });
+</script>
+
+</body>
+</html>
