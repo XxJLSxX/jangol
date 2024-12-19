@@ -5,8 +5,13 @@ from django.contrib.auth.models import User
 # User Profile Extension (optional, for extra user data)
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=10)
+    breed = models.CharField(max_length=100)
+    birthday = models.DateField()
+    location = models.CharField(max_length=200)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
