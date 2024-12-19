@@ -13,8 +13,8 @@ def signup(request):
 # def login_user(request):
 #     return render(request, "login.html")
 
-def signup(request):
-    return render(request, "signup.html")
+def viewprofile(request):
+    return render(request, "viewprofile.html")
 
 #Function
 def login_user(request):
