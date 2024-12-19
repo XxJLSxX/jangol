@@ -16,6 +16,9 @@ def signup(request):
 def viewprofile(request):
     return render(request, "viewprofile.html")
 
+def chat(request):
+    return render(request, "chat.html")
+
 #Function
 def login_user(request):
     if request.method == "POST":
