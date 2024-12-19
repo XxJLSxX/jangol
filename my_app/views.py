@@ -16,9 +16,6 @@ def signup(request):
 def createprofile(request):
     return render(request, "createform.html")
 
-# def login_user(request):
-#     return render(request, "login.html")
-
 def viewprofile(request):
     return render(request, "viewprofile.html")
 

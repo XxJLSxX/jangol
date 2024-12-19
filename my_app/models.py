@@ -6,12 +6,11 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10)
-    breed = models.CharField(max_length=100)
-    birthday = models.DateField()
-    location = models.CharField(max_length=200)
-
+    name = models.CharField(max_length=100, default='Unknown')
+    gender = models.CharField(max_length=10, default='Unknown')
+    breed = models.CharField(max_length=100, default='Unknown')
+    birthday = models.DateField(default='2000-01-01')
+    location = models.CharField(max_length=200, default='Unknown')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
