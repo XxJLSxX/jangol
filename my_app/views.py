@@ -16,10 +16,7 @@ def forgotpass(request):
         return redirect('home') 
     return render(request, "forgotpassword.html")
 
-def signup(request):
-    if request.user.is_authenticated:
-        return redirect('home') 
-    return render(request, "signup.html")
+
 
 @login_required(login_url='login')
 def createprofile(request):
@@ -89,7 +86,10 @@ class UserRegistrationForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
 
-def register_user(request):
+
+def signup(request):
+    if request.user.is_authenticated:
+        return redirect('home') 
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -101,9 +101,10 @@ def register_user(request):
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
 
-            messages.success(request, "User registered successfully!")
-            return redirect('home')  # Replace 'home' with your desired redirect page
+            #messages.success(request, "User registered successfully!")
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            return redirect("createprofile")
     else:
         form = UserRegistrationForm()
-
-    return render(request, 'register.html', {'form': form})
+        return render(request, 'signup.html', {'form': form})

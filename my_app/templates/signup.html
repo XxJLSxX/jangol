@@ -21,7 +21,7 @@
                 <div class="container">
                     <div class="container login-form">
                         <p style="text-align: center; color: #335288; font-size: 40px; font-weight: bold;">Welcome</p>
-                        <form id="signup-form" action="{% url 'createprofile' %}" method="POST">
+                        <form id="signup-form" method="POST">
                             {% csrf_token %}
                             <p class="login_content" style="text-align: left;">Enter Username: </p>
                             <input class="form-field" type="text" name="username" value="" required>
@@ -34,7 +34,7 @@
                             <input class="form-field" type="password" name="password" value="" required oninput="validatePassword()" onkeydown="checkEnter(event)">
                             
                             <p class="login_content" style="text-align: left;">Confirm Password: </p>
-                            <input class="form-field" type="password" name="confirm-password" required value="" oninput="validatePassword()" onkeydown="checkEnter(event)">
+                            <input class="form-field" type="password" name="confirm_password" required value="" oninput="validatePassword()" onkeydown="checkEnter(event)">
                             
                             <div id="criteria-container" style="display: none;">
                                 <ul id="criteria" style="list-style-type: none; padding: 0;">
