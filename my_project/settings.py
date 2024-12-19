@@ -126,3 +126,15 @@ STATICFILES_DIRS = [BASE_DIR / "static"]  # Directory for static files
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#SESSSIONS
+# Use database-backed sessions (default)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Session expiration time (optional)
+SESSION_COOKIE_AGE = 1209600  # 2 weeks (in seconds)
+
+# Secure the session cookie (optional)
+SESSION_COOKIE_SECURE = True  # Use HTTPS for session cookies
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to cookies
+SESSION_SAVE_EVERY_REQUEST = False  # Save the session only if it has been modified
