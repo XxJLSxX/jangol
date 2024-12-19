@@ -11,5 +11,5 @@ urlpatterns = [
     path('messages/', views.chat, name='chat'),
     path('forgot password/', views.forgotpass, name='forgotpass'),
     path('create/', views.createprofile, name='createprofile'),
-
+    path('logout/', views.logout_user, name='logout'),
 ]
