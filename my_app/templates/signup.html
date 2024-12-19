@@ -24,7 +24,10 @@
                         <form id="signup-form" action="createform.html" method="POST">
                             {% csrf_token %}
                             <p class="login_content" style="text-align: left;">Enter Username: </p>
-                            <input class="form-field" type="text" name="username" value="" required oninput="validateEmail()">
+                            <input class="form-field" type="text" name="username" value="" required>
+
+                            <p class="login_content" style="text-align: left;">Enter Username: </p>
+                            <input class="form-field" type="email" name="email" value="" required oninput="validateEmail()">
                             <p class="email-feedback" id="email-feedback" style="color: red; display: none;">Please enter a valid email address.</p>
                             
                             <p class="login_content" style="text-align: left;">Enter Password: </p>
