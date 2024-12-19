@@ -26,7 +26,7 @@
 </head>
 <body>
     <div style="margin: 40px 80px 40px 80px;">
-        <form class="container-fluid create-form-container" method="POST">
+        <form class="container-fluid create-form-container" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div style="padding: 20px;">
                 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">

@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -22,9 +23,12 @@ def forgotpass(request):
 @login_required(login_url='login')
 def createprofile(request):
     if request.method == "POST":
-        user = request.user
-        profile_picture = request.POST["pet_picture"]
+        user = request.user 
+        profile_picture = request.FILES["pet_picture"]
         name = request.POST["petname"]
+        original_name, original_ext = os.path.splitext(profile_picture.name)
+        new_name = f"{name}{original_ext}"
+        profile_picture.name = new_name
         breed = request.POST["petbreed"]
         gender = request.POST["petgender"]
         birthday = request.POST["petbirthday"]
