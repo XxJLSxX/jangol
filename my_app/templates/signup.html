@@ -21,7 +21,7 @@
                 <div class="container">
                     <div class="container login-form">
                         <p style="text-align: center; color: #335288; font-size: 40px; font-weight: bold;">Welcome</p>
-                        <form id="signup-form" action="createform.html" method="POST">
+                        <form id="signup-form" action="{% createprofile %}" method="POST">
                             {% csrf_token %}
                             <p class="login_content" style="text-align: left;">Enter Username: </p>
                             <input class="form-field" type="text" name="username" value="" required>
