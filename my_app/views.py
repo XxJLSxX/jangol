@@ -16,6 +16,9 @@ def signup(request):
 def viewprofile(request):
     return render(request, "viewprofile.html")
 
+def editprofile(request):
+    return render(request, "editprofile.html")
+
 def chat(request):
     return render(request, "chat.html")
 

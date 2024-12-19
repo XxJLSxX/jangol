@@ -115,16 +115,16 @@
     <div class="container-fluid" style="background-color: #D6B68e; height: 56px;">
         <div class="flex-container" style="display: flex; align-items: center; padding-top: 10px; position: relative;">
             <div class="container-fluid" style="flex-grow: 1;">
-                <a href="home.html" style="text-decoration: none;">
+                <a href="{% url 'home' %}" style="text-decoration: none;">
                     <img src="{% static 'images/tagline.png' %}" alt="Logo" style="height: 30px;">
                 </a>
                 <input type="text" class="search-bar-home" placeholder="Search..." style="height: 30px; width: 35%; margin-left: 20px; padding-left: 12px;">
             </div>
             <div class="container-fluid" style="text-align: right; padding-right: 26px;">
-                <a class="icon-button" href="chat.html">
+                <a class="icon-button" href="{% url 'chat' %}">
                     <i class="fa-solid fa-message"></i>
                 </a>
-                <a href="viewprofile.html" style="text-decoration: none; padding: 0 0 0 20px;">
+                <a href="{% url 'viewprofile' %}" style="text-decoration: none; padding: 0 0 0 20px;">
                     <img src="{% static 'images/tagline.png' %}" class="profile-pic-btn" alt="Profile Picture">
                 </a>
             </div>
