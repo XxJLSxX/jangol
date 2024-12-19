@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import Profile
 
 # Create your views here.
 @login_required(login_url='login')
@@ -20,7 +21,19 @@ def forgotpass(request):
 
 @login_required(login_url='login')
 def createprofile(request):
-    return render(request, "createform.html")
+    if request.method == "POST":
+        user = request.user
+        profile_picture = request.POST["pet_picture"]
+        name = request.POST["petname"]
+        breed = request.POST["petbreed"]
+        gender = request.POST["petgender"]
+        birthday = request.POST["petbirthday"]
+        location = request.POST["location"]
+        petprofile = Profile(user=user, profile_picture=profile_picture, name=name, gender=gender, breed=breed, birthday=birthday, location=location) 
+        petprofile.save()
+        return redirect('home')
+    else:
+        return render(request, "createform.html")
 
 @login_required(login_url='login')
 def viewprofile(request):

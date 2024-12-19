@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 # User Profile Extension (optional, for extra user data)
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='static/profile_pics/', blank=True, null=True)
     name = models.CharField(max_length=100, default='Unknown')
     gender = models.CharField(max_length=10, default='Unknown')
     breed = models.CharField(max_length=100, default='Unknown')
