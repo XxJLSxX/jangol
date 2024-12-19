@@ -10,15 +10,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <style>
-        .gallery {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
+    .detail-section{
+        background-color: #D6B68e;
+        border-radius: 25px;
+        padding: 26px;
+        margin: 0;
     }
-
-    .gallery img {
-        width: 150px;
-        border-radius: 5px;
+    .detail-section p{
+       font-weight: bold;
+       margin: 0;
+    }
+    .viewprof-img{
+        width: 120px; 
+        height: 120px;
+        border-radius: 26px;
+        object-fit: cover; 
+        margin: 0 16px 16px 0;
     }
     
     </style>
@@ -46,6 +53,7 @@
         </div>
     </div>
 
+
 <div class="container-fluid">
     <div class="container" style="display: flex; align-items: center; margin-top: 35px;">
         <img src="ginger/ginger1.jpg" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
@@ -54,6 +62,57 @@
             <button class="edit-profile-btn"><a style="text-decoration: none; color: black;" href="editprofile.html">Edit Profile</a></button>
         </div>
     </div>
+
+    <div class="container details" style="margin-top: 26px; display: flex;">
+        <div style="flex: 1; margin-right: 20px;">
+            <h2 style="font-weight: bold;">About</h2>
+            <div class="detail-section">
+                <p>Breed: Ginger</p>
+                <p>Age: 2</p>
+                <p>Birthday: 2</p>
+                <p>Gender: Male</p>
+                <p>Location: San Jose City</p>
+            </div>
+        </div>
+
+        <div style="flex: 1;">
+            <h2 style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <span>Gallery</span>
+                <i class="fas fa-plus" style="cursor: pointer; margin-left: 10px;" onclick="document.getElementById('fileInput').click();"></i>
+            </h2>
+            <input type="file" id="fileInput" multiple accept="image/*" style="display: none;" onchange="handleFiles(this.files)">
+            <div class="detail-section" id="imagePreview">
+                <!-- 8 max pics js -->
+            </div>
+
+        </div>
+    </div>
 </div>
+
+<button class="btn btn-danger" style="margin: 40px auto; display: block;">Logout</button>
+
+<script>
+    function handleFiles(files) {
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.innerHTML = ''; // Clear previous images
+
+        if (files.length > 8) {
+            alert('You can only upload a maximum of 8 images.');
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'viewprof-img'; // Add your existing class for styling
+                imagePreview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 </body>
 </html>
