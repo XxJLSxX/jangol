@@ -10,5 +10,6 @@ urlpatterns = [
     path('edit/', views.editprofile, name='editprofile'),
     path('messages/', views.chat, name='chat'),
     path('forgot password/', views.forgotpass, name='forgotpass'),
+    path('create/', views.createprofile, name='createprofile'),
 
 ]

@@ -13,6 +13,9 @@ def forgotpass(request):
 def signup(request):
     return render(request, "signup.html")
 
+def createprofile(request):
+    return render(request, "createform.html")
+
 # def login_user(request):
 #     return render(request, "login.html")
 
