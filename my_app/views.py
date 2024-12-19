@@ -7,6 +7,9 @@ from django.contrib import messages
 def home(request):
     return render(request, "home.html")
 
+def forgotpass(request):
+    return render(request, "forgotpassword.html")
+
 def signup(request):
     return render(request, "signup.html")
 
