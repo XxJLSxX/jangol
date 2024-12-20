@@ -9,23 +9,25 @@ from .models import Profile, GalleryImage
 from django.contrib.auth.hashers import make_password
 from datetime import date, datetime
 from django.urls import reverse
-
+from .models import Profile, GalleryImage
+# from templatetags import custom_tags
 # Create your views here.
+
 @login_required(login_url='login')
 def home(request):
     search_query = request.GET.get('search', '')
     profiles = Profile.objects.all()
     profile = profiles.first()  
     gallery_images = GalleryImage.objects.all()
-    manggagamit = User.objects.values_list('id', flat=True)
     
+    gallery_images = GalleryImage.objects.all()
+    images = [image.image.url for image in gallery_images]
+
     if search_query:
         profiles = profiles.filter(location__icontains=search_query) | profiles.filter(breed__icontains=search_query)
     
     locations = profiles.values_list('location', flat=True).distinct()
     breeds = profiles.values_list('breed', flat=True).distinct()
-    
-    images = [image.image.url for image in gallery_images]
     
     if profile:
         birth_date = profile.birthday
@@ -42,7 +44,7 @@ def home(request):
         'locations': list(locations),
         'breeds': list(breeds),
         'images': images,
-        'manggagamit': manggagamit
+        'dummy' : False,
     }
     return render(request, 'home.html', context)
 
