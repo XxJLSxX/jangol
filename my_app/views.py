@@ -96,7 +96,28 @@ def delete_gallery_image(request, image_id):
 
 @login_required(login_url='login')
 def editprofile(request):
-    return render(request, "editprofile.html")
+    profile = Profile.objects.get(user=request.user)
+    
+    if request.method == 'POST':
+        profile.name = request.POST.get('petname')
+        profile.breed = request.POST.get('petbreed')
+        profile.gender = request.POST.get('petgender')
+        profile.birthday = request.POST.get('petbirthday')
+        profile.location = request.POST.get('location')
+        
+        if 'pet-picture' in request.FILES:
+            profile.profile_picture = request.FILES['pet-picture']
+        
+        profile.save()
+        return redirect('viewprofile', user_id=request.user.id)
+    
+    birthday = profile.birthday.strftime('%Y-%m-%d') if profile.birthday else ''
+    
+    context = {
+        'profile': profile,
+        'birthday': birthday
+    }
+    return render(request, 'editprofile.html', context)
 
 @login_required(login_url='login')
 def chat(request):

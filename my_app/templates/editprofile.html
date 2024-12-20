@@ -27,7 +27,8 @@
 <body>
     <div style="margin: 40px 80px 40px 80px;">
         <!-- Update Form na sha -->
-        <form class="container-fluid create-form-container" method="POST" action="">
+        <form class="container-fluid create-form-container" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
             <div style="padding: 20px;">
                 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
                     <label class="custom-file-upload" style="padding-bottom: 20px; text-align: center;" for="pet-picture">
@@ -35,29 +36,29 @@
                         <div style="display: flex; justify-content: center; align-items: center;">
                             <img id="preview" src="" alt="" style="display: none;">
                         </div>
-                        <input type="file" id="pet-picture" name="pet-picture" accept=".png, .jpg, .jpeg" onchange="displayImage(event)">
+                        <input type="file" id="pet-picture" name="pet-picture" onchange="displayImage(event)">
                     </label>
                 </div>
                 <br>
                 <label for="petname">Name of Pet: </label>
-                    <input type="text" id="petname" name="petname" placeholder="What is your pet name?" required>
+                    <input type="text" id="petname" name="petname" placeholder="What is your pet name?" value="{{ profile.name }}" required>
                 <br><br>
                 <label for="petbreed">Breed:</label>
-                <input type="text" id="petbreed" name="petbreed" placeholder="Type your pet breed..." autocomplete="off" required>
+                <input type="text" id="petbreed" name="petbreed" placeholder="Type your pet breed..." value="{{ profile.breed }}" autocomplete="off" required>
                 <ul id="breed-autocomplete-results"></ul>
                 <br><br>
                 <label>Gender:</label>
                     <select name="petgender" required>
-                        <option value="" style="color: gray;" disabled selected>Select Gender</option>
+                        <option value="" style="color: gray;" disabled selected>Select your pet gender...</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                 <br><br>
                 <label>Birthday:</label><br>
-                <input type="date" name="petname" required>
+                <input type="date" name="petbirthday" value="{{ birthday }}" required>
                 <br><br>
                 <label for="location">Location:</label><br>
-                <input type="text" id="location" name="location" placeholder="Start typing your location..." autocomplete="off" required>
+                <input type="text" id="location" name="location" placeholder="Start typing your location..." value="{{ profile.location }}" autocomplete="off" required>
                 <ul id="autocomplete-results" class="autocomplete-dropdown"></ul>
                 <br><br>
                 <div style="text-align: center;">
