@@ -48,11 +48,22 @@
                 <span>Gallery</span>
                 <i class="fas fa-plus" style="cursor: pointer; margin-left: 10px;" onclick="document.getElementById('fileInput').click();"></i>
             </h2>
-            <input type="file" id="fileInput" multiple accept="image/*" style="display: none;" onchange="handleFiles(this.files)">
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" id="fileInput" name="image" multiple accept="image/*" style="display: none;" onchange="this.form.submit()">
+            </form>
             <div class="detail-section" id="imagePreview">
-                <!-- 8 max pics js -->
+                {% for image in gallery_images %}
+                    <img src="{{ image.image.url }}" alt="Gallery Image" style="max-width: 100px; max-height: 100px;">
+                {% endfor %}
             </div>
-
         </div>
     </div>
 </div>

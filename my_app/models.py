@@ -17,43 +17,15 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-# Posts
-class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    content = models.TextField()
-    media_url = models.ImageField(upload_to='post_media/', blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+# Gallery
+class GalleryImage(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='gallery_images')
+    image = models.ImageField(upload_to='gallery_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Post by {self.user.username} at {self.created_at}"
+        return f"Image for {self.profile.user.username} uploaded at {self.uploaded_at}"
 
-# Likes
-class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.username} liked {self.post.id}"
-
-# Comments
-class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Comment by {self.user.username} on {self.post.id}"
-
-# Followers
-class Follower(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    followee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.follower.username} follows {self.followee.username}"
 
 # Messages
 class Message(models.Model):

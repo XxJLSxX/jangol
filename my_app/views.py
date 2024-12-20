@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Profile
+from .models import Profile, GalleryImage
 from django.contrib.auth.hashers import make_password
 from datetime import date, datetime
 
@@ -184,3 +184,29 @@ def reset_password(request):
             return redirect('login')
 
     return render(request, "password_reset_confirm.html")
+
+# For Uploading Images in Gallery
+class GalleryImageForm(forms.ModelForm):
+    class Meta:
+        model = GalleryImage
+        fields = ['image']
+
+def viewprofile(request):
+    profile = Profile.objects.get(user=request.user)
+    gallery_images = profile.gallery_images.all()
+    
+    if request.method == 'POST':
+        if gallery_images.count() >= 8:
+            messages.error(request, "You can only upload up to 8 images.")
+            return redirect('viewprofile')
+        
+        form = GalleryImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            gallery_image = form.save(commit=False)
+            gallery_image.profile = profile
+            gallery_image.save()
+            return redirect('viewprofile')
+    else:
+        form = GalleryImageForm()
+    
+    return render(request, 'viewprofile.html', {'profile': profile, 'form': form, 'gallery_images': gallery_images})
