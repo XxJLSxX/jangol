@@ -36,6 +36,7 @@
                             <input class="form-field" type="text" name="username" value="">
                             <p class="login_content" style="text-align: left;">Enter Password: </p>
                             <input class="form-field" type="password" name="password" value="">
+                            <a href="{% url 'forgotpass' %}" class="forgot-password-button" style="text-align: right; text-decoration: none;  color: #335288; display: block; margin-top: 6px;">Forgot Password?</a>
                             <input type="submit" class="login-button" value="Log In"><br>
                             <hr style="color: black; padding-top: 20px;">
                             <a href="{% url 'signup' %}" class="signup-button">Sign Up</a>
