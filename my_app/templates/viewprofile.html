@@ -24,7 +24,7 @@
 
 <div class="container-fluid">
     <div class="container" style="display: flex; align-items: center; margin-top: 35px;">
-        <img src="ginger/ginger1.jpg" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
+        <img src="{ % static 'media/profile.profile_picture' %}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
         <div style="margin-left: 10px;">
             <h1 style="margin: 0; text-transform: uppercase; font-weight: bold;">{{profile.name}}</h1>
             <button class="edit-profile-btn"><a style="text-decoration: none; color: black;" href="{% url 'editprofile' %}">Edit Profile</a></button>
@@ -36,12 +36,7 @@
             <h2 style="font-weight: bold;">About</h2>
             <div class="detail-section">
                 <p>Breed: {{ profile.breed }}</p>
-            <p>Age: 
-                {% now "Y" as current_year %}
-                {% with profile.birthday|date:"Y" as birth_year %}
-                    {{ current_year|add:"-birth_year" }}
-                {% endwith %}
-            </p>
+            <p>Age: {{ age }} years old</p>
             <p>Birthday: {{ profile.birthday }}</p>
             <p>Gender: {{ profile.gender }}</p>
             <p>Location: {{ profile.location }}</p>

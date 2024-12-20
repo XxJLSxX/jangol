@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.contrib.auth.hashers import make_password
+from datetime import date, datetime
 
 # Create your views here.
 @login_required(login_url='login')
@@ -44,7 +45,13 @@ def createprofile(request):
 def viewprofile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     profile = get_object_or_404(Profile, user=user)
-    return render(request, 'viewprofile.html', {'profile': profile})
+
+    # Calculate age
+    today = date.today()
+    birth_date = profile.birthday
+    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+    return render(request, 'viewprofile.html', {'profile': profile, 'age': age})
 
 @login_required(login_url='login')
 def editprofile(request):
