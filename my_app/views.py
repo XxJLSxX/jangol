@@ -14,8 +14,22 @@ from datetime import date, datetime
 @login_required(login_url='login')
 def home(request):
     profiles = Profile.objects.all()
+    profile = profiles.first()  # Get the first profile from the QuerySet
     
-    return render(request, 'home.html', {'profiles': profiles})
+    if profile:
+        birth_date = profile.birthday
+        today = date.today()
+        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    else:
+        birth_date = None
+        age = None
+
+    context = {
+        'profiles': profiles,
+        'birthday': birth_date,
+        'age': age
+    }
+    return render(request, 'home.html', context)
 
 def forgotpass(request):
     if request.user.is_authenticated:
