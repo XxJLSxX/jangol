@@ -125,7 +125,11 @@
                     <i class="fa-solid fa-message"></i>
                 </a>
                 <a href="{% url 'viewprofile' user.id %}" style="text-decoration: none; padding: 0 0 0 20px;">
-                    <img src="{% static 'images/tagline.png' %}" class="profile-pic-btn" alt="Profile Picture">
+                  {% if profile and profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" class="profile-pic-btn" alt="Profile Picture">
+                  {% else %}
+                    <img src="{% static 'default_profile_picture.png' %}" class="profile-pic-btn" alt="Default Profile Picture">
+                  {% endif %}
                 </a>
             </div>
         </div>
