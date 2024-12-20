@@ -140,13 +140,14 @@ def editprofile(request):
     }
     return render(request, 'editprofile.html', context)
 
+# Chat Functions
 @login_required(login_url='login')
 def chat(request):
     sent_messages = Message.objects.filter(sender=request.user).values_list('receiver_id', flat=True)
     received_messages = Message.objects.filter(receiver=request.user).values_list('sender_id', flat=True)
     user_ids = set(sent_messages).union(set(received_messages))
     users = User.objects.filter(id__in=user_ids)
-
+    
     # Get the latest message for each user
     latest_messages = {}
     for user in users:
@@ -155,7 +156,11 @@ def chat(request):
         ).order_by('-timestamp').first()
         latest_messages[user.id] = latest_message
 
-    return render(request, 'chat.html', {'users': users, 'latest_messages': latest_messages})
+    # Get profiles for users
+    # profiles = {profile.user.id: profile for profile in Profile.objects.filter(user__in=users)}
+    profiles = Profile.objects.all()
+
+    return render(request, 'chat.html', {'users': users, 'latest_messages': latest_messages, 'profiles': profiles})
 
 @login_required(login_url='login')
 def load_chat(request, user_id):

@@ -5,20 +5,20 @@
 <div class="main-container">
     <!-- Left sidebar with user list -->
     <div class="user-list">
+        {% for profile in profiles %}
         {% for user in users %}
+        {% if profile.user.id == user.id %}
+        {% with latest_messages.user.id as latest_message %}
         <div class="user-item" onclick="loadChat({{ user.id }})">
-            <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}">
+            <img src="{{ profile.profile_picture.url }}" alt="{{ user.username }}">
             <div class="user-info">
-                <div class="user-name">{{ user.username }}</div>
-                <div class="message-preview">
-                    {% if latest_message %}
-                        {{ latest_message.content|truncatewords:10 }}
-                    {% else %}
-                        No messages yet
-                    {% endif %}
-                </div>
+            <div class="user-name">{{ user.username }}</div>
+            
             </div>
         </div>
+        {% endwith %}
+        {% endif %}
+        {% endfor %}
         {% endfor %}
     </div>
 
