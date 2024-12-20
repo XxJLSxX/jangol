@@ -6,7 +6,7 @@
   <div class="pet-cards-flex">
       {% for profile in profiles %}
       {% if user.id != profile.user.id %}
-      <div class="pet-card" onclick="openPopup('{{ user.id }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
+      <div class="pet-card" onclick="openPopup('{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
           <a href="javascript:void(0);" style="text-decoration: none;">
               <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
               <div class="pet-info">
@@ -30,21 +30,7 @@
     <span class="close-btn" id="closePopup" onclick="closePopup()">X</span>
   </div>
   <div class="popup-content">
-    <div class="gallery">
-      {% for profile in profiles %}
-          {% for image in profile.gallery_images.all %}
-              {% if manggagamit.id != profile.user.id %}
-                  <img src="{{ image.image.url }}" id="popupID" alt="Gallery Image">
-              {% endif %}
-          {% endfor %}
-      {% endfor %}
-      <br>
-      <div class="gallery-controls">
-        <button id="prevBtn">❮</button>
-        <button id="nextBtn">❯</button>
-      </div>
-    </div>
-    <h1 id="popupName">Name</h1>
+    <h1 id="popupName" style="font-weight: bold;">Name</h1>
     <p id="popupDetails">Gender <i>(Breed)</i></p>
     <p id="popupBirthday">🎂 Birthday (Age)</p>
     <p id="popupLocation">📍 Location</p>
@@ -56,8 +42,7 @@
 </div>
 
 <script>
-function openPopup(id, name, gender, breed, birthday, age, location) {
-    document.getElementById('popupID').innerText = id;
+function openPopup(name, gender, breed, birthday, age, location) {
     document.getElementById('popupName').innerText = name;
     document.getElementById('popupDetails').innerText = `${gender} | (${breed})`;
     document.getElementById('popupBirthday').innerText = `🎂 ${birthday} (${age} years old)`;
