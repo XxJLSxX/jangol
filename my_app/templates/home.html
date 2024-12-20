@@ -6,7 +6,7 @@
   <div class="pet-cards-flex">
       {% for profile in profiles %}
       {% if user.id != profile.user.id %}
-      <div class="pet-card" onclick="openPopup('{{ user.id }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
+      <div class="pet-card" onclick="openPopup('{{ profile.user.id }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
           <a href="javascript:void(0);" style="text-decoration: none;">
               <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
               <div class="pet-info">
@@ -32,11 +32,11 @@
   <div class="popup-content">
     <div class="gallery">
       {% for profile in profiles %}
-          {% for image in profile.gallery_images.all %}
-              {% if manggagamit.id != profile.user.id %}
+          {% if profile.user.id != user.id %}
+              {% for image in profile.gallery_images.all %}
                   <img src="{{ image.image.url }}" id="popupID" alt="Gallery Image">
-              {% endif %}
-          {% endfor %}
+              {% endfor %}
+          {% endif %}
       {% endfor %}
       <br>
       <div class="gallery-controls">

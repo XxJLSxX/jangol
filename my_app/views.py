@@ -9,8 +9,10 @@ from .models import Profile, GalleryImage
 from django.contrib.auth.hashers import make_password
 from datetime import date, datetime
 from django.urls import reverse
-
+from .models import Profile, GalleryImage
+# from templatetags import custom_tags
 # Create your views here.
+
 @login_required(login_url='login')
 def home(request):
     search_query = request.GET.get('search', '')
