@@ -124,7 +124,7 @@
                 <a class="icon-button" href="{% url 'chat' %}">
                     <i class="fa-solid fa-message"></i>
                 </a>
-                <a href="{% url 'viewprofile' %}" style="text-decoration: none; padding: 0 0 0 20px;">
+                <a href="{% url 'viewprofile' user.id %}" style="text-decoration: none; padding: 0 0 0 20px;">
                     <img src="{% static 'images/tagline.png' %}" class="profile-pic-btn" alt="Profile Picture">
                 </a>
             </div>
