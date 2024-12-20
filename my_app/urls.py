@@ -18,6 +18,8 @@ urlpatterns = [
     path('create/', views.createprofile, name='createprofile'),
     path('logout/', views.logout_user, name='logout'),
     path('delete_image/<int:image_id>/', views.delete_gallery_image, name='delete_gallery_image'),
+    path('chat/', views.chat, name='chat_view'),
+    path('chat/<int:user_id>/', views.load_chat, name='load_chat'),
     path('send_message/', views.send_message, name='send_message'),
 ]
 

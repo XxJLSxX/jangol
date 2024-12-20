@@ -1,5 +1,6 @@
 import os
 import json
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -141,7 +142,30 @@ def editprofile(request):
 
 @login_required(login_url='login')
 def chat(request):
-    return render(request, "chat.html")
+    sent_messages = Message.objects.filter(sender=request.user).values_list('receiver_id', flat=True)
+    received_messages = Message.objects.filter(receiver=request.user).values_list('sender_id', flat=True)
+    user_ids = set(sent_messages).union(set(received_messages))
+    users = User.objects.filter(id__in=user_ids)
+
+    # Get the latest message for each user
+    latest_messages = {}
+    for user in users:
+        latest_message = Message.objects.filter(
+            (Q(sender=request.user) & Q(receiver=user)) | (Q(sender=user) & Q(receiver=request.user))
+        ).order_by('-timestamp').first()
+        latest_messages[user.id] = latest_message
+
+    return render(request, 'chat.html', {'users': users, 'latest_messages': latest_messages})
+
+@login_required(login_url='login')
+def load_chat(request, user_id):
+    if request.method == 'GET':
+        user = User.objects.get(id=user_id)
+        messages = Message.objects.filter(sender=request.user, receiver=user) | Message.objects.filter(sender=user, receiver=request.user)
+        messages = messages.order_by('timestamp')
+        chat_data = [{'sender': msg.sender.username, 'content': msg.content, 'timestamp': msg.timestamp} for msg in messages]
+        return JsonResponse({'chat': chat_data})
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @login_required(login_url='login')
 @csrf_exempt

@@ -2,119 +2,107 @@
 {% block title %}<title>Chats</title>{% endblock %}
 {% block content %}
 {% load static %}
-    <div class="main-container">
-
-        <!-- Left sidebar with user list -->
-        <div class="user-list">
-            <div class="user-item" onclick="loadChat('john')">
-                <img src="profile-pic-1.jpg" alt="User 1">
-                <div class="user-info">
-                    <div class="user-name">John Doe</div>
-                    <div class="message-preview">Hey, what's up?</div>
+<div class="main-container">
+    <!-- Left sidebar with user list -->
+    <div class="user-list">
+        {% for user in users %}
+        <div class="user-item" onclick="loadChat({{ user.id }})">
+            <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}">
+            <div class="user-info">
+                <div class="user-name">{{ user.username }}</div>
+                <div class="message-preview">
+                    {% if latest_message %}
+                        {{ latest_message.content|truncatewords:10 }}
+                    {% else %}
+                        No messages yet
+                    {% endif %}
                 </div>
-            </div>
-            <div class="user-item" onclick="loadChat('jane')">
-                <img src="profile-pic-2.jpg" alt="User 2">
-                <div class="user-info">
-                    <div class="user-name">Jane Smith</div>
-                    <div class="message-preview">Let's meet later.</div>
-                </div>
-            </div>
-            <div class="user-item" onclick="loadChat('sam')">
-                <img src="profile-pic-3.jpg" alt="User 3">
-                <div class="user-info">
-                    <div class="user-name">Sam Brown</div>
-                    <div class="message-preview">Got your message!</div>
-                </div>
-            </div>
-            <!-- Add more users here -->
-        </div>
-
-        <!-- Right side - Chat interface -->
-        <div class="chat-container" id="chat-container">
-            <div class="messages" id="messages">
-                <!-- Messages will load dynamically here -->
-            </div>
-
-            <div class="input-container">
-                <input type="text" id="message-input" placeholder="Type a message...">
-                <button class="send-button" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
-
+        {% endfor %}
     </div>
 
-    <script>
-        // Data for each user's chat (could be dynamically loaded from a database)
-        const chats = {
-            john: [
-                { sender: "John", text: "Hey, what's up?" },
-                { sender: "You", text: "I'm good, thanks!" },
-                { sender: "John", text: "Let's catch up soon!" }
-            ],
-            jane: [
-                { sender: "Jane", text: "Let's meet later." },
-                { sender: "You", text: "Sounds good!" },
-                { sender: "Jane", text: "I'll text you when I'm free." }
-            ],
-            sam: [
-                { sender: "Sam", text: "Got your message!" },
-                { sender: "You", text: "Great!" },
-                { sender: "Sam", text: "Let's talk soon." },
-                { sender: "Sam", text: "Got your message!" },
-                { sender: "You", text: "Great!" },
-                { sender: "Sam", text: "Let's talk soon." },
-                { sender: "Sam", text: "Got your message!" },
-                { sender: "You", text: "Great!" },
-                { sender: "Sam", text: "Let's talk soon." },
-                { sender: "Sam", text: "Got your message!" },
-                { sender: "You", text: "Great!" },
-                { sender: "Sam", text: "Let's talk soon." }
-            ]
-        };
+    <!-- Right side - Chat interface -->
+    <div class="chat-container" id="chat-container">
+        <div class="messages" id="messages">
+            <!-- Messages will load dynamically here -->
+        </div>
 
-        // Function to load the chat for a specific user
-        function loadChat(user) {
-            const messagesContainer = document.getElementById('messages');
-            messagesContainer.innerHTML = ''; // Clear existing messages
+        <div class="input-container">
+            <input type="hidden" id="receiver-id">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button class="send-button" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
 
-            const chat = chats[user];
-            chat.forEach(message => {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message', message.sender === 'You' ? 'sent' : 'received');
-                messageElement.innerHTML = `
-                    <span class="sender">${message.sender}:</span>
-                    <span class="text">${message.text}</span>
-                `;
-                messagesContainer.appendChild(messageElement);
-            });
-
-            const userItems = document.querySelectorAll('.user-item');
-            userItems.forEach(item => item.classList.remove('active')); // Remove active class from all users
-            const activeItem = document.querySelector(`.user-item[onclick="loadChat('${user}')"]`);
-            if (activeItem) {
-                activeItem.classList.add('active'); // Add active class to clicked user
-            }
-
-            document.getElementById('message-input').focus();
-        }
-
-        // Function to send a message
-        function sendMessage() {
-            const messageInput = document.getElementById('message-input');
-            const messageText = messageInput.value.trim();
-            if (messageText) {
+<script>
+    function loadChat(userId) {
+        fetch(`/chat/${userId}/`)
+            .then(response => response.json())
+            .then(data => {
                 const messagesContainer = document.getElementById('messages');
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message', 'sent');
-                messageElement.innerHTML = `
-                    <span class="sender">You:</span>
-                    <span class="text">${messageText}</span>
-                `;
-                messagesContainer.appendChild(messageElement);
-                messageInput.value = ''; // Clear input field
-                messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to bottom
-            }
+                messagesContainer.innerHTML = ''; // Clear existing messages
+
+                data.chat.forEach(message => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', message.sender === '{{ request.user.username }}' ? 'sent' : 'received');
+                    messageElement.innerHTML = `
+                        <span class="text">${message.content}</span>
+                    `;
+                    messagesContainer.appendChild(messageElement);
+                });
+
+                const userItems = document.querySelectorAll('.user-item');
+                userItems.forEach(item => item.classList.remove('active')); // Remove active class from all users
+                const activeItem = document.querySelector(`.user-item[onclick="loadChat(${userId})"]`);
+                if (activeItem) {
+                    activeItem.classList.add('active'); // Add active class to clicked user
+                }
+
+                document.getElementById('message-input').focus();
+                document.getElementById('receiver-id').value = userId; // Set the receiver ID
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function sendMessage() {
+        const messageInput = document.getElementById('message-input');
+        const content = messageInput.value.trim();
+        const receiverId = document.getElementById('receiver-id').value;
+
+        if (content && receiverId) {
+            fetch("{% url 'send_message' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    receiver_id: receiverId,
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const messagesContainer = document.getElementById('messages');
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', 'sent');
+                    messageElement.innerHTML = `
+                        <span class="text">${content}</span>
+                    `;
+                    messagesContainer.appendChild(messageElement);
+                    messageInput.value = ''; // Clear input field
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to bottom
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        } else {
+            alert('Please enter a message.');
         }
-    </script>
+    }
+</script>
 {% endblock %}
