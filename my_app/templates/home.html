@@ -33,7 +33,7 @@
     <div class="gallery">
       {% for profile in profiles %}
           {% for image in profile.gallery_images.all %}
-              {% if user.id != profile.user.id %}
+              {% if manggagamit.id != profile.user.id %}
                   <img src="{{ image.image.url }}" id="popupID" alt="Gallery Image">
               {% endif %}
           {% endfor %}

@@ -17,6 +17,7 @@ def home(request):
     profiles = Profile.objects.all()
     profile = profiles.first()  
     gallery_images = GalleryImage.objects.all()
+    manggagamit = User.objects.values_list('id', flat=True)
     
     if search_query:
         profiles = profiles.filter(location__icontains=search_query) | profiles.filter(breed__icontains=search_query)
@@ -40,7 +41,8 @@ def home(request):
         'age': age,
         'locations': list(locations),
         'breeds': list(breeds),
-        'images': images
+        'images': images,
+        'manggagamit': manggagamit
     }
     return render(request, 'home.html', context)
 
