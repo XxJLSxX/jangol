@@ -6,7 +6,7 @@
   <div class="pet-cards-flex">
       {% for profile in profiles %}
       {% if user.id != profile.user.id %}
-      <div class="pet-card" onclick="openPopup('{{ profile.profile_picture.url }}', '{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
+      <div class="pet-card" onclick="openPopup('{{ user.id }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
           <a href="javascript:void(0);" style="text-decoration: none;">
               <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
               <div class="pet-info">
@@ -31,7 +31,13 @@
   </div>
   <div class="popup-content">
     <div class="gallery">
-      <img src="" id="galleryImage" alt="Profile Picture">
+      {% for profile in profiles %}
+          {% for image in profile.gallery_images.all %}
+              {% if user.id != profile.user.id %}
+                  <img src="{{ image.image.url }}" id="popupID" alt="Gallery Image">
+              {% endif %}
+          {% endfor %}
+      {% endfor %}
       <br>
       <div class="gallery-controls">
         <button id="prevBtn">❮</button>
@@ -50,8 +56,8 @@
 </div>
 
 <script>
-function openPopup(imageUrl, name, gender, breed, birthday, age, location) {
-    document.getElementById('galleryImage').src = imageUrl;
+function openPopup(id, name, gender, breed, birthday, age, location) {
+    document.getElementById('popupID').innerText = id;
     document.getElementById('popupName').innerText = name;
     document.getElementById('popupDetails').innerText = `${gender} | (${breed})`;
     document.getElementById('popupBirthday').innerText = `🎂 ${birthday} (${age} years old)`;
