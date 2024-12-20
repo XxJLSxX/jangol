@@ -16,12 +16,15 @@ def home(request):
     search_query = request.GET.get('search', '')
     profiles = Profile.objects.all()
     profile = profiles.first()  
+    gallery_images = GalleryImage.objects.all()
     
     if search_query:
         profiles = profiles.filter(location__icontains=search_query) | profiles.filter(breed__icontains=search_query)
     
     locations = profiles.values_list('location', flat=True).distinct()
     breeds = profiles.values_list('breed', flat=True).distinct()
+    
+    images = [image.image.url for image in gallery_images]
     
     if profile:
         birth_date = profile.birthday
@@ -36,7 +39,8 @@ def home(request):
         'birthday': birth_date,
         'age': age,
         'locations': list(locations),
-        'breeds': list(breeds)
+        'breeds': list(breeds),
+        'images': images
     }
     return render(request, 'home.html', context)
 

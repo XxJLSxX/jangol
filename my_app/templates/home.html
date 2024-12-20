@@ -66,64 +66,79 @@ function closePopup() {
 }
 </script>
 
-  <script>
-    const heartIcons = document.querySelectorAll('.heart-icon');
+<script>
+const heartIcons = document.querySelectorAll('.heart-icon');
 
-    heartIcons.forEach(icon => {
-      icon.addEventListener('click', () => {
-        icon.classList.toggle('clicked');
-      });
-    });
+heartIcons.forEach(icon => {
+  icon.addEventListener('click', () => {
+    icon.classList.toggle('clicked');
+  });
+});
 
 // Elements
 const showPopup = document.getElementById("showPopup");
-  const closePopup = document.getElementById("closePopup");
-  const overlay = document.getElementById("overlay");
-  const popup = document.getElementById("popup");
+const closePopup = document.getElementById("closePopup");
+const overlay = document.getElementById("overlay");
+const popup = document.getElementById("popup");
 
-  // Show pop-up
-  showPopup.addEventListener("click", function (e) {
-    e.preventDefault();
-    overlay.style.display = "block";
-    popup.style.display = "block";
-  });
+// Show pop-up
+showPopup.addEventListener("click", function (e) {
+  e.preventDefault();
+  overlay.style.display = "block";
+  popup.style.display = "block";
+});
 
-  // Hide pop-up
-  closePopup.addEventListener("click", function () {
-    overlay.style.display = "none";
-    popup.style.display = "none";
-  });
+// Hide pop-up
+closePopup.addEventListener("click", function () {
+  overlay.style.display = "none";
+  popup.style.display = "none";
+});
 
-  // Close overlay
-  overlay.addEventListener("click", function () {
-    overlay.style.display = "none";
-    popup.style.display = "none";
-  });
+// Close overlay
+overlay.addEventListener("click", function () {
+  overlay.style.display = "none";
+  popup.style.display = "none";
+});
 
-  const images = [
-    'ginger/ginger1.jpg',
-    'ginger/ginger2.jpg',
-    'ginger/ginger3.jpg' // Add more image paths as needed
-  ];
-  let currentIndex = 0;
+const images = [
+  {% for image in images %}
+    "{{ image }}"{% if not forloop.last %},{% endif %}
+  {% endfor %}
+];
 
-  const galleryImage = document.getElementById('galleryImage');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
+console.log('Images array:', images);
 
-  function updateImage() {
-    galleryImage.src = images[currentIndex];
+let currentIndex = 0;
+const galleryImage = document.getElementById('galleryImage');
+
+if (galleryImage) {
+  console.log('Gallery image element found:', galleryImage);
+} else {
+  console.error('Gallery image element not found');
+}
+
+function showImage(index) {
+  if (images.length > 0) {
+    galleryImage.src = images[index];
+    galleryImage.style.display = 'block';
+    console.log('Showing image:', images[index]);
+  } else {
+    console.error('No images to display');
   }
+}
 
-  prevBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
-    updateImage();
-  });
+document.getElementById('prevBtn').addEventListener('click', function() {
+  currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+  showImage(currentIndex);
+});
 
-  nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
-    updateImage();
-  });
+document.getElementById('nextBtn').addEventListener('click', function() {
+  currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+  showImage(currentIndex);
+});
+
+// Show the first image initially
+showImage(currentIndex);
 </script>
 
 {% endblock %}
