@@ -16,6 +16,7 @@ def home(request):
     search_query = request.GET.get('search', '')
     profiles = Profile.objects.all()
     profile = profiles.first()  
+    gallery_images = GalleryImage.objects.all()
     
     gallery_images = GalleryImage.objects.all()
     images = [image.image.url for image in gallery_images]
@@ -41,6 +42,7 @@ def home(request):
         'locations': list(locations),
         'breeds': list(breeds),
         'images': images,
+        'dummy' : False,
     }
     return render(request, 'home.html', context)
 
