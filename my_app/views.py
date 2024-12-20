@@ -1,4 +1,5 @@
 import os
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -9,7 +10,9 @@ from .models import Profile, GalleryImage
 from django.contrib.auth.hashers import make_password
 from datetime import date, datetime
 from django.urls import reverse
-from .models import Profile, GalleryImage
+from .models import Profile, GalleryImage, Message
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 # from templatetags import custom_tags
 # Create your views here.
 
@@ -139,6 +142,30 @@ def editprofile(request):
 @login_required(login_url='login')
 def chat(request):
     return render(request, "chat.html")
+
+@login_required(login_url='login')
+@csrf_exempt
+def send_message(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            sender = request.user
+            receiver_id = data.get('receiver_id')
+            content = data.get('content')
+
+            if receiver_id and content:
+                try:
+                    receiver = User.objects.get(id=receiver_id)
+                    message = Message(sender=sender, receiver=receiver, content=content)
+                    message.save()
+                    return JsonResponse({'status': 'success', 'message': 'Message sent successfully.'})
+                except User.DoesNotExist:
+                    return JsonResponse({'status': 'error', 'message': 'Receiver not found.'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid data.'})
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 #Fun Login
 def login_user(request):

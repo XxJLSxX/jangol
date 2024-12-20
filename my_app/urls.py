@@ -18,6 +18,7 @@ urlpatterns = [
     path('create/', views.createprofile, name='createprofile'),
     path('logout/', views.logout_user, name='logout'),
     path('delete_image/<int:image_id>/', views.delete_gallery_image, name='delete_gallery_image'),
+    path('send_message/', views.send_message, name='send_message'),
 ]
 
 if settings.DEBUG:

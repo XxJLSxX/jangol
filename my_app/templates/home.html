@@ -6,7 +6,7 @@
   <div class="pet-cards-flex">
       {% for profile in profiles %}
       {% if user.id != profile.user.id %}
-      <div class="pet-card" onclick="openPopup('{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
+      <div class="pet-card" onclick="openPopup('{{ profile.name }}', '{{ profile.gender }}', '{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}', '{{ profile.location }}', '{{ profile.user.id }}')">
           <a href="javascript:void(0);" style="text-decoration: none;">
               <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
               <div class="pet-info">
@@ -35,18 +35,20 @@
     <p id="popupBirthday">🎂 Birthday (Age)</p>
     <p id="popupLocation">📍 Location</p>
     <div class="message-box">
-      <input type="text" placeholder="Send a message...">
-      <button>➤</button>
+      <input type="hidden" id="receiver-id" value="{{ receiver.id }}">
+      <input type="text" id="message-input" placeholder="Send a message...">
+      <button onclick="sendMessage()">➤</button>
     </div>
   </div>
 </div>
 
 <script>
-function openPopup(name, gender, breed, birthday, age, location) {
+function openPopup(name, gender, breed, birthday, age, location, userId) {
     document.getElementById('popupName').innerText = name;
     document.getElementById('popupDetails').innerText = `${gender} | (${breed})`;
     document.getElementById('popupBirthday').innerText = `🎂 ${birthday} (${age} years old)`;
     document.getElementById('popupLocation').innerText = `📍 ${location}`;
+    document.getElementById('receiver-id').value = userId;
     document.getElementById('overlay').style.display = 'block';
     document.getElementById('popup').style.display = 'block';
 }
@@ -58,78 +60,37 @@ function closePopup() {
 </script>
 
 <script>
-const heartIcons = document.querySelectorAll('.heart-icon');
+function sendMessage() {
+    const messageInput = document.getElementById('message-input');
+    const content = messageInput.value.trim();
+    const receiverId = document.getElementById('receiver-id').value;
 
-heartIcons.forEach(icon => {
-  icon.addEventListener('click', () => {
-    icon.classList.toggle('clicked');
-  });
-});
-
-// Elements
-const showPopup = document.getElementById("showPopup");
-const closePopup = document.getElementById("closePopup");
-const overlay = document.getElementById("overlay");
-const popup = document.getElementById("popup");
-
-// Show pop-up
-showPopup.addEventListener("click", function (e) {
-  e.preventDefault();
-  overlay.style.display = "block";
-  popup.style.display = "block";
-});
-
-// Hide pop-up
-closePopup.addEventListener("click", function () {
-  overlay.style.display = "none";
-  popup.style.display = "none";
-});
-
-// Close overlay
-overlay.addEventListener("click", function () {
-  overlay.style.display = "none";
-  popup.style.display = "none";
-});
-
-const images = [
-  {% for image_url in images %}
-    "{{ image_url }}",
-  {% endfor %}
-];
-
-console.log('Images array:', images);
-
-let currentIndex = 0;
-const galleryImage = document.getElementById('galleryImage');
-
-if (galleryImage) {
-  console.log('Gallery image element found:', galleryImage);
-} else {
-  console.error('Gallery image element not found');
+    if (content && receiverId) {
+        fetch("{% url 'send_message' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                receiver_id: receiverId,
+                content: content
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                messageInput.value = '';
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        alert('Please enter a message.');
+    }
 }
-
-function showImage(index) {
-  if (images.length > 0) {
-    galleryImage.src = images[index];
-    galleryImage.style.display = 'block';
-    console.log('Showing image:', images[index]);
-  } else {
-    console.error('No images to display');
-  }
-}
-
-document.getElementById('prevBtn').addEventListener('click', function() {
-  currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
-  showImage(currentIndex);
-});
-
-document.getElementById('nextBtn').addEventListener('click', function() {
-  currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
-  showImage(currentIndex);
-});
-
-// Show the first image initially
-showImage(currentIndex);
 </script>
 
 {% endblock %}
