@@ -5,7 +5,8 @@
 <div class="container-fluid" style="margin-top: 2px; font-family: helvetica;">
     <div class="pet-cards-flex">
         {% for profile in profiles %}
-        <div class="pet-card" onclick="openPopup('{{ profile.profile_picture.url }}', '{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{profile.birthday}}', '{{age}}','{{ profile.location }}')">
+        {% if user.id != profile.user.id %}
+        <div class="pet-card" onclick="openPopup('{{ profile.profile_picture.url }}', '{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
             <a href="javascript:void(0);" style="text-decoration: none;">
                 <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
                 <div class="pet-info">
@@ -15,6 +16,7 @@
                 </div>
             </a>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 </div>
