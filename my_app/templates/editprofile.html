@@ -49,9 +49,9 @@
                 <br><br>
                 <label>Gender:</label>
                     <select name="petgender" required>
-                        <option value="" style="color: gray;" disabled selected>Select your pet gender...</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="" style="color: gray;" disabled {% if not profile.gender %}selected{% endif %}>Select your pet gender...</option>
+                        <option value="Male" {% if profile.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if profile.gender == 'Female' %}selected{% endif %}>Female</option>
                     </select>
                 <br><br>
                 <label>Birthday:</label><br>
