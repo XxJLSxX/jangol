@@ -17,6 +17,7 @@ urlpatterns = [
     path('password_reset_confirm/', views.reset_password, name='reset_password'),
     path('create/', views.createprofile, name='createprofile'),
     path('logout/', views.logout_user, name='logout'),
+    path('delete_image/<int:image_id>/', views.delete_gallery_image, name='delete_gallery_image'),
 ]
 
 if settings.DEBUG:

@@ -1,6 +1,5 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django import forms
@@ -9,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, GalleryImage
 from django.contrib.auth.hashers import make_password
 from datetime import date, datetime
+from django.urls import reverse
 
 # Create your views here.
 @login_required(login_url='login')
@@ -59,13 +59,40 @@ def createprofile(request):
 def viewprofile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     profile = get_object_or_404(Profile, user=user)
-
+    gallery_images = profile.gallery_images.all()   
     # Calculate age
     today = date.today()
     birth_date = profile.birthday
     age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    # For Gallery Images
+    if request.method == 'POST':
+        images = request.FILES.getlist('images')
+        if gallery_images.count() + len(images) > 8:
+            messages.error(request, "You can only upload up to 8 images.")
+            return redirect(reverse('viewprofile', args=[user_id]))
+        
+        for image in images:
+            gallery_image = GalleryImage(profile=profile, image=image)
+            gallery_image.save()
+        return redirect(reverse('viewprofile', args=[user_id]))
+    else:
+        form = GalleryImageForm()
+    
+    return render(request, 'viewprofile.html', {'profile': profile, 'age': age, 'form': form, 'gallery_images': gallery_images})
 
-    return render(request, 'viewprofile.html', {'profile': profile, 'age': age})
+# Delete Gallery Image
+@login_required(login_url='login')
+def delete_gallery_image(request, image_id):
+    image = get_object_or_404(GalleryImage, id=image_id)
+    profile = image.profile
+
+    if request.user != profile.user:
+        messages.error(request, "You do not have permission to delete this image.")
+        return redirect('viewprofile', user_id=profile.user.id)
+
+    image.delete()
+    messages.success(request, "Image deleted successfully.")
+    return redirect('viewprofile', user_id=profile.user.id)
 
 @login_required(login_url='login')
 def editprofile(request):
@@ -205,22 +232,3 @@ class GalleryImageForm(forms.ModelForm):
         model = GalleryImage
         fields = ['image']
 
-def viewprofile(request):
-    profile = Profile.objects.get(user=request.user)
-    gallery_images = profile.gallery_images.all()
-    
-    if request.method == 'POST':
-        if gallery_images.count() >= 8:
-            messages.error(request, "You can only upload up to 8 images.")
-            return redirect('viewprofile')
-        
-        form = GalleryImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            gallery_image = form.save(commit=False)
-            gallery_image.profile = profile
-            gallery_image.save()
-            return redirect('viewprofile')
-    else:
-        form = GalleryImageForm()
-    
-    return render(request, 'viewprofile.html', {'profile': profile, 'form': form, 'gallery_images': gallery_images})
