@@ -49,8 +49,8 @@
                 <label>Gender:</label>
                     <select name="petgender" required>
                         <option value="" style="color: gray;" disabled selected>Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
                 <br><br>
                 <label>Birthday:</label><br>
@@ -63,7 +63,7 @@
                 <div style="text-align: center;">
                     <input type="submit" value="Update Pet Profile" class="create-profile-btn">
                     <br><br>
-                    <a href="{% url 'viewprofile' %}" style="text-decoration: none; color: black; font-weight: bold;">Cancel</a>
+                    <a href="{% url 'viewprofile' user.id %}" style="text-decoration: none; color: black; font-weight: bold;">Cancel</a>
                 </div>
             </div>
         </form>

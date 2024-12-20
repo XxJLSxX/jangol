@@ -24,7 +24,7 @@
 
 <div class="container-fluid">
     <div class="container" style="display: flex; align-items: center; margin-top: 35px;">
-        <img src="{ % static 'media/profile.profile_picture' %}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
+        <img src="{ % static 'profile.profile_picture.url' %}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
         <div style="margin-left: 10px;">
             <h1 style="margin: 0; text-transform: uppercase; font-weight: bold;">{{profile.name}}</h1>
             <button class="edit-profile-btn"><a style="text-decoration: none; color: black;" href="{% url 'editprofile' %}">Edit Profile</a></button>

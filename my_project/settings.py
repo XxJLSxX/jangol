@@ -141,5 +141,5 @@ SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to cookies
 SESSION_SAVE_EVERY_REQUEST = False  # Save the session only if it has been modified
 
 # For uploaded photos of profile pic
-MEDIA_ROOT = BASE_DIR / 'media'
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
