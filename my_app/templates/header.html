@@ -118,7 +118,11 @@
                 <a href="{% url 'home' %}" style="text-decoration: none;">
                     <img src="{% static 'images/tagline.png' %}" alt="Logo" style="height: 30px;">
                 </a>
-                <input type="text" class="search-bar-home" placeholder="Search..." style="height: 30px; width: 35%; margin-left: 20px; padding-left: 12px;">
+                <form method="GET" action="{% url 'home' %}" style="display: inline;">
+                  <input type="text" class="search-bar-home" name="search" placeholder="Search..." style="height: 30px; width: 35%; margin-left: 20px; padding-left: 12px;" id="searchBar">
+                  <div id="suggestions" class="suggestions-dropdown" style="position: absolute; background: white; border: 1px solid #ccc; width: 35%; margin-left: 20px; display: none;"></div>
+              </form>
+                
             </div>
             <div class="container-fluid" style="text-align: right; padding-right: 26px;">
                 <a class="icon-button" href="{% url 'chat' %}">
@@ -141,4 +145,43 @@
 
 {% endblock %}
 </body>
+<script>
+  const locations = {{ locations|safe }};
+  const breeds = {{ breeds|safe }};
+  
+  const searchBar = document.getElementById('searchBar');
+  const suggestionsContainer = document.getElementById('suggestions');
+
+  searchBar.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      const suggestions = [...locations, ...breeds].filter(item => item.toLowerCase().includes(query));
+      
+      // Clear previous suggestions
+      suggestionsContainer.innerHTML = '';
+      
+      if (suggestions.length > 0) {
+          suggestionsContainer.style.display = 'block';
+          suggestions.forEach(item => {
+              const suggestionItem = document.createElement('div');
+              suggestionItem.textContent = item;
+              suggestionItem.style.padding = '8px';
+              suggestionItem.style.cursor = 'pointer';
+              suggestionItem.addEventListener('click', function() {
+                  searchBar.value = item;
+                  suggestionsContainer.style.display = 'none';
+              });
+              suggestionsContainer.appendChild(suggestionItem);
+          });
+      } else {
+          suggestionsContainer.style.display = 'none';
+      }
+  });
+
+  // Hide suggestions when clicking outside
+  document.addEventListener('click', function(event) {
+      if (!searchBar.contains(event.target) && !suggestionsContainer.contains(event.target)) {
+          suggestionsContainer.style.display = 'none';
+      }
+  });
+</script>
 </html>

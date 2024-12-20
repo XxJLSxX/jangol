@@ -13,8 +13,15 @@ from django.urls import reverse
 # Create your views here.
 @login_required(login_url='login')
 def home(request):
+    search_query = request.GET.get('search', '')
     profiles = Profile.objects.all()
-    profile = profiles.first()  # Get the first profile from the QuerySet
+    profile = profiles.first()  
+    
+    if search_query:
+        profiles = profiles.filter(location__icontains=search_query) | profiles.filter(breed__icontains=search_query)
+    
+    locations = profiles.values_list('location', flat=True).distinct()
+    breeds = profiles.values_list('breed', flat=True).distinct()
     
     if profile:
         birth_date = profile.birthday
@@ -27,7 +34,9 @@ def home(request):
     context = {
         'profiles': profiles,
         'birthday': birth_date,
-        'age': age
+        'age': age,
+        'locations': list(locations),
+        'breeds': list(breeds)
     }
     return render(request, 'home.html', context)
 

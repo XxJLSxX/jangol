@@ -8,3 +8,12 @@ def user_profile(request):
             profile = None
         return {'profile': profile}
     return {}
+
+def global_context(request):
+    profiles = Profile.objects.all()
+    locations = profiles.values_list('location', flat=True).distinct()
+    breeds = profiles.values_list('breed', flat=True).distinct()
+    return {
+        'locations': list(locations),
+        'breeds': list(breeds)
+    }

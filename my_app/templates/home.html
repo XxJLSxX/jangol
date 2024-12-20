@@ -3,22 +3,22 @@
 {% block content %}
 {% load static %}
 <div class="container-fluid" style="margin-top: 2px; font-family: helvetica;">
-    <div class="pet-cards-flex">
-        {% for profile in profiles %}
-        {% if user.id != profile.user.id %}
-        <div class="pet-card" onclick="openPopup('{{ profile.profile_picture.url }}', '{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
-            <a href="javascript:void(0);" style="text-decoration: none;">
-                <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
-                <div class="pet-info">
-                    <h1 style="font-size: 32px;">{{ profile.name }}</h1>
-                    <h3 style="font-size: 16px;">{{ profile.breed }}</h3>
-                    <p>{{ profile.location }}</p>
-                </div>
-            </a>
-        </div>
-        {% endif %}
-        {% endfor %}
-    </div>
+  <div class="pet-cards-flex">
+      {% for profile in profiles %}
+      {% if user.id != profile.user.id %}
+      <div class="pet-card" onclick="openPopup('{{ profile.profile_picture.url }}', '{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.birthday }}', '{{ age }}','{{ profile.location }}')">
+          <a href="javascript:void(0);" style="text-decoration: none;">
+              <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
+              <div class="pet-info">
+                  <h1 style="font-size: 32px;">{{ profile.name }}</h1>
+                  <h3 style="font-size: 16px;">{{ profile.breed }}</h3>
+                  <p>{{ profile.location }}</p>
+              </div>
+          </a>
+      </div>
+      {% endif %}
+      {% endfor %}
+  </div>
 </div>
 
 <!-- Overlay -->
@@ -125,4 +125,5 @@ const showPopup = document.getElementById("showPopup");
     updateImage();
   });
 </script>
+
 {% endblock %}
