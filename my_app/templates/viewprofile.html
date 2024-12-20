@@ -63,7 +63,7 @@
             <div class="detail-section" id="imagePreview">
                 {% for image in gallery_images %}
                     <div style="display: inline-block; position: relative;">
-                    <img src="{{ image.image.url }}" alt="Gallery Image" style="max-width: 100px; max-height: 100px;">
+                    <img src="{{ image.image.url }}" alt="Gallery Image" class="viewprof-img">
                     <a href="{% url 'delete_gallery_image' image.id %}" style="position: absolute; top: 0; right: 0; background: red; color: white; padding: 2px 5px; text-decoration: none;">X</a>
                 </div>
                 {% endfor %}

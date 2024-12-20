@@ -116,12 +116,12 @@
         <div class="flex-container" style="display: flex; align-items: center; padding-top: 10px; position: relative;">
             <div class="container-fluid" style="flex-grow: 1;">
                 <a href="{% url 'home' %}" style="text-decoration: none;">
-                    <img src="{% static 'images/tagline.png' %}" alt="Logo" style="height: 30px;">
+                    <img src="{% static 'images/logo.png' %}" alt="Logo" style="height: 30px;">
                 </a>
-                <form method="GET" action="{% url 'home' %}" style="display: inline;">
+                <form method="GET" action="{% url 'home' %}" style="display: inline;" id="searchForm">
                   <input type="text" class="search-bar-home" name="search" placeholder="Search..." style="height: 30px; width: 35%; margin-left: 20px; padding-left: 12px;" id="searchBar">
-                  <div id="suggestions" class="suggestions-dropdown" style="position: absolute; background: white; border: 1px solid #ccc; width: 35%; margin-left: 20px; display: none;"></div>
-              </form>
+                  <div id="suggestions" class="suggestions-dropdown" style="position: absolute; background: white; border: 1px solid #ccc; width: 35%; margin-left: 20px; display: none; z-index: 1000;"></div>
+                </form>
                 
             </div>
             <div class="container-fluid" style="text-align: right; padding-right: 26px;">
@@ -151,6 +151,7 @@
   
   const searchBar = document.getElementById('searchBar');
   const suggestionsContainer = document.getElementById('suggestions');
+  const searchForm = document.getElementById('searchForm');
 
   searchBar.addEventListener('input', function() {
       const query = this.value.toLowerCase();
@@ -166,9 +167,11 @@
               suggestionItem.textContent = item;
               suggestionItem.style.padding = '8px';
               suggestionItem.style.cursor = 'pointer';
+              suggestionItem.style.borderBottom = '1px solid #ccc';
               suggestionItem.addEventListener('click', function() {
                   searchBar.value = item;
                   suggestionsContainer.style.display = 'none';
+                  searchForm.submit(); // Submit the form with the selected suggestion
               });
               suggestionsContainer.appendChild(suggestionItem);
           });
@@ -180,8 +183,16 @@
   // Hide suggestions when clicking outside
   document.addEventListener('click', function(event) {
       if (!searchBar.contains(event.target) && !suggestionsContainer.contains(event.target)) {
-          suggestionsContainer.style.display = 'none';
+          setTimeout(() => {
+              suggestionsContainer.style.display = 'none';
+          }, 200); // Delay of 200ms
       }
   });
 </script>
+
+<style>
+  .suggestions-dropdown div:hover {
+      background-color: #f0f0f0;
+  }
+</style>
 </html>
