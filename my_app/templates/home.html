@@ -101,8 +101,8 @@ overlay.addEventListener("click", function () {
 });
 
 const images = [
-  {% for image in images %}
-    "{{ image }}"{% if not forloop.last %},{% endif %}
+  {% for image_url in images %}
+    "{{ image_url }}",
   {% endfor %}
 ];
 
