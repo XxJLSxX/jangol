@@ -7,6 +7,7 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Profile
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 @login_required(login_url='login')
@@ -16,7 +17,7 @@ def home(request):
 def forgotpass(request):
     if request.user.is_authenticated:
         return redirect('home') 
-    return render(request, "forgotpassword.html")
+    return render(request, "forgot_password.html")
 
 
 
@@ -125,3 +126,52 @@ def signup(request):
     else:
         form = UserRegistrationForm()
         return render(request, 'signup.html', {'form': form})
+
+# For forgot password
+def forgotpass(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        try:
+            # Check if the user exists with the provided email
+            user = User.objects.get(email=email)
+            # Store user's ID in the session for the reset password step
+            request.session['reset_user_id'] = user.id
+            return redirect('reset_password')
+
+        except User.DoesNotExist:
+            messages.error(request, "No account found with this email.")
+            
+    return render(request, "forgot_password.html")
+
+
+def reset_password(request):
+    user_id = request.session.get('reset_user_id')
+
+    if not user_id:
+        messages.error(request, "Session expired or invalid access.")
+        return redirect('forgotpass')
+
+    if request.method == "POST":
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('reset_password')
+        else:
+            # Update the user's password
+            user = User.objects.get(id=user_id)
+            user.password = make_password(password)
+            user.save()
+
+            # Clear the session
+            del request.session['reset_user_id']
+
+            messages.success(request, "Password reset successful. Please log in.")
+            return redirect('login')
+
+    return render(request, "password_reset_confirm.html")
