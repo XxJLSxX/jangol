@@ -13,14 +13,14 @@ from datetime import date, datetime
 # Create your views here.
 @login_required(login_url='login')
 def home(request):
-    return render(request, "home.html")
+    profiles = Profile.objects.all()
+    
+    return render(request, 'home.html', {'profiles': profiles})
 
 def forgotpass(request):
     if request.user.is_authenticated:
         return redirect('home') 
     return render(request, "forgot_password.html")
-
-
 
 @login_required(login_url='login')
 def createprofile(request):

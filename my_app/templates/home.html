@@ -2,109 +2,68 @@
 {% block title %}<title>Home</title>{% endblock %}
 {% block content %}
 {% load static %}
-<div style="display: flex; justify-content: flex-end; padding-top: 10px; padding-right: 30px">
-  <select class="filter-option">
-    <option value="" disabled selected>Filter</option>
-    <option value="breed">Same Breed</option>
-    <option value="location">Same Location</option>
-  </select>
-</div>
-
 <div class="container-fluid" style="margin-top: 2px; font-family: helvetica;">
     <div class="pet-cards-flex">
-        <div class="pet-card">
-            <a href="#" id="showPopup" style="text-decoration: none;">
-            <img src="{% static 'images/tagline.png' %}" alt="Alexis the Cat">
-            <div class="pet-info">
-              <h1>Alexis (4), M</h1>
-              <p>Short Description</p>
-            </div>
+        {% for profile in profiles %}
+        <div class="pet-card" onclick="openPopup('{{ profile.profile_picture.url }}', '{{ profile.name }}', '{{ profile.gender }}','{{ profile.breed }}', '{{ profile.location }}')">
+            <a href="javascript:void(0);" style="text-decoration: none;">
+                <img src="{{ profile.profile_picture.url }}" alt="{{ profile.name }}">
+                <div class="pet-info">
+                    <h1 style="font-size: 32px;">{{ profile.name }}</h1>
+                    <h3 style="font-size: 16px;">{{ profile.breed }}</h3>
+                    <p>{{ profile.location }}</p>
+                </div>
             </a>
             <div class="heart-icon">
-              <i class="fa fa-heart"></i>
+                <i class="fa fa-heart"></i>
             </div>
         </div>
-
-        <div class="pet-card">
-            <a href="" style="text-decoration: none;">
-            <img src="{% static 'images/tagline.png' %}" alt="Alexis the Cat">
-            <div class="pet-info">
-              <h1>Alexis (4), M</h1>
-              <p>Short Description</p>
-            </div>
-            </a>
-            <div class="heart-icon">
-              <i class="fa fa-heart"></i>
-            </div>
-        </div>
-
-        <div class="pet-card">
-            <a href="" style="text-decoration: none;">
-            <img src="{% static 'images/tagline.png' %}" alt="Alexis the Cat">
-            <div class="pet-info">
-              <h1>Alexis (4), M</h1>
-              <p>Short Description</p>
-            </div>
-            </a>
-            <div class="heart-icon">
-              <i class="fa fa-heart"></i>
-            </div>
-        </div>
-
-        <div class="pet-card">
-            <a href="" style="text-decoration: none;">
-            <img src="{% static 'images/tagline.png' %}" alt="Alexis the Cat">
-            <div class="pet-info">
-              <h1>Alexis (4), M</h1>
-              <p>Short Description</p>
-            </div>
-            </a>
-            <div class="heart-icon">
-              <i class="fa fa-heart"></i>
-            </div>
-        </div>
-
-        <div class="pet-card">
-            <a href="" style="text-decoration: none;">
-            <img src="{% static 'images/tagline.png' %}" alt="Alexis the Cat">
-            <div class="pet-info">
-              <h1>Alexis (4), M</h1>
-              <p>Short Description</p>
-            </div>
-            </a>
-            <div class="heart-icon">
-              <i class="fa fa-heart"></i>
-            </div>
-        </div>
+        {% endfor %}
     </div>
-  </div>
+</div>
 
-  <!-- Overlay -->
-<div class="overlay" id="overlay"></div>
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closePopup()"></div>
 
 <!-- Pop-up -->
 <div class="popup" id="popup">
   <div class="popup-header">
-    <span class="close-btn" id="closePopup">X</span>
+    <span class="close-btn" id="closePopup" onclick="closePopup()">X</span>
   </div>
   <div class="popup-content">
     <div class="gallery">
-      <img src="{% static 'images/tagline.png' %}" id="galleryImage" alt="Alexis">
+      <img src="" id="galleryImage" alt="Profile Picture">
       <br>
       <div class="gallery-controls">
         <button id="prevBtn">❮</button>
         <button id="nextBtn">❯</button>
       </div>
     </div>
-    <h1>Alexis</h1>
-    <p>Male | 4 <i>(Breed)</i></p>
-    <p>📍 San Jose City, Nueva Ecija</p>
+    <h1 id="popupName">Name</h1>
+    <p id="popupDetails">Gender <i>(Breed)</i></p>
+    <p id="popupLocation">📍 Location</p>
     <div class="message-box">
       <input type="text" placeholder="Send a message...">
       <button>➤</button>
     </div>
   </div>
 </div>
+
+<script>
+function openPopup(imageUrl, name, gender, breed, location) {
+    document.getElementById('galleryImage').src = imageUrl;
+    document.getElementById('popupName').innerText = name;
+    document.getElementById('popupDetails').innerText = `${gender} | (${breed})`;
+    document.getElementById('popupLocation').innerText = `📍 ${location}`;
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('popup').style.display = 'block';
+}
+
+function closePopup() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('popup').style.display = 'none';
+}
+</script>
 
   <script>
     const heartIcons = document.querySelectorAll('.heart-icon');
